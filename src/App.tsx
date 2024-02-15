@@ -1,35 +1,33 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import Chart from "./components/Chart";
+import Selector from "./components/Selector";
+import Bid from "./components/Bid";
+import LimitOrder from "./components/LimitOrder";
+import Offer from "./components/Offer";
+import BuyOrders from "./components/BuyOrders";
+import SellOrders from "./components/SellOrders";
+import History from "./components/History";
 
-function App() {
-  const [count, setCount] = useState(0)
 
+const style = {
+  border: "1px solid red",
+  padding: "1rem",
+  // width:"600px",
+  // height:"400px"
+};
+
+export default function App() {
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <main style={style}>
+        <Chart />
+        <Selector />
+        <Bid />
+        <LimitOrder />
+        <Offer />
+        <BuyOrders />
+        <SellOrders />
+        <History />
+      </main>
     </>
-  )
+  );
 }
-
-export default App
