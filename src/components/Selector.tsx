@@ -1,49 +1,29 @@
 import { useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { setCurrencyFrom, setCurrencyTo, swap } from "../features/selector/pairSelectorSlice";
 import swapIcon from "../assets/swap.svg"
-
-
-const data = ["USD", "RUB", "EUR", "CNY", "JPY"];
-
-const currencies = {
-  USD: "United States Dollar",
-  RUB: "Russian Ruble",
-  EUR: "Euro",
-  CNY: "Chinese Yuan",
-  JPY: "Japanese Yen"
-};
+import { data, currencies } from "../tempDB";
 
 
 export default function Selector() {
 
-  const [currencyFrom, setCurrencyFrom] = useState(data[0]);
-  const [currencyTo, setCurrencyTo] = useState(data[1]);
-
-  const handleFromSelection = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCurrencyFrom(event.target.value);
-  };
-
-  const handleToSelection = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    setCurrencyTo(event.target.value);
-  };
-
-  const handleSwap = () => {
-    setCurrencyFrom(currencyTo);
-    setCurrencyTo(currencyFrom);
-  };
+  const currencyFrom = useSelector((state) => state.selector.currencyFrom);
+  const currencyTo = useSelector((state) => state.selector.currencyTo);
+  const dispatch = useDispatch();
 
   return (
     <>
       <p>Currency pair</p>
-      <select name="from" id="currency-from" value={currencyFrom} onChange={handleFromSelection}>
+      <select name="from" id="currency-from" value={currencyFrom} onChange={(event) => dispatch(setCurrencyFrom(event.target.value))}>
         {data.map((el) => {
           if(el !== currencyTo)
             return <option value={el} key={el}>{currencies[el as keyof typeof currencies]}</option>;
         })}
       </select>
-      <button onClick={handleSwap}>
+      <button onClick={() => dispatch(swap())}>
         <img src={swapIcon} alt="swap currencies" className="btn icon" width={24}/>
         </button>
-      <select name="to" id="currency-to" value={currencyTo} onChange={handleToSelection}>
+      <select name="to" id="currency-to" value={currencyTo} onChange={(event) => dispatch(setCurrencyTo(event.target.value))}>
         {data.map((el) => {
           if(el !== currencyFrom)
             return <option value={el} key={el}>{currencies[el as keyof typeof currencies]}</option>;
