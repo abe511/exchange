@@ -11,8 +11,6 @@ import History from "./components/History";
 const style = {
   border: "1px solid red",
   padding: "1rem",
-  // width:"600px",
-  // height:"400px"
 };
 
 export default function App() {
