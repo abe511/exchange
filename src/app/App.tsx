@@ -1,4 +1,4 @@
-import Chart from "../components/Chart";
+import PriceChart from "../components/PriceChart";
 import Selector from "../components/Selector";
 import Bid from "../components/Bid";
 import LimitOrder from "../components/LimitOrder";
@@ -8,16 +8,14 @@ import SellOrders from "../components/SellOrders";
 import History from "../components/History";
 
 
-const style = {
-  border: "1px solid red",
-  padding: "1rem",
-};
+import "../styles/App.css";
+
 
 export default function App() {
   return (
     <>
-      <main style={style}>
-        <Chart />
+      <main>
+        <PriceChart />
         <Selector />
         <Bid />
         <LimitOrder />

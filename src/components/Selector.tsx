@@ -1,14 +1,13 @@
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setCurrencyFrom, setCurrencyTo, swap } from "../features/selector/pairSelectorSlice";
 import swapIcon from "../assets/swap.svg"
-import { data, currencies } from "../tempDB";
+import { data, currencies } from "../app/tempDB";
 
 
 export default function Selector() {
 
-  const currencyFrom = useSelector((state) => state.selector.currencyFrom);
-  const currencyTo = useSelector((state) => state.selector.currencyTo);
+  const currencyFrom = useSelector((state) => state.pairSelector.currencyFrom);
+  const currencyTo = useSelector((state) => state.pairSelector.currencyTo);
   const dispatch = useDispatch();
 
   return (

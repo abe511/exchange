@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { data } from "../../tempDB";
+import { data } from "../../app/tempDB";
 
 const initialState = {
   currencyFrom: data[0],
@@ -7,7 +7,7 @@ const initialState = {
 };
 
 export const pairSelectorSlice = createSlice({
-  name: "selector",
+  name: "pairSelector",
   initialState,
   reducers: {
     setCurrencyFrom: (state, action) => {

@@ -1,9 +1,10 @@
 import { configureStore } from "@reduxjs/toolkit";
-import selectorSlice from "../features/selector/pairSelectorSlice";
-
+import pairSelectorSlice from "../features/selector/pairSelectorSlice";
+import buyOrdersSlice from "../features/orders/buyOrdersSlice";
 
 export const store = configureStore({
   reducer: {
-    selector: selectorSlice
+    pairSelector: pairSelectorSlice,
+    buyOrders: buyOrdersSlice,
   }
 });
