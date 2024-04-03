@@ -2,7 +2,7 @@
 
 #### React, Redux Toolkit, Typescript, Styled Components, Chart.js
 ---
-### [**demo**]("https://exchange11.onrender.com/")
+### [**demo**](https://exchange11.onrender.com/)
 ---
 The app allows users to:
 
