@@ -1,4 +1,4 @@
-import RateChart from "../components/RateChart";
+// import RateChart from "../components/RateChart";
 import Selector from "../components/Selector";
 import BuyOrderForm from "../components/BuyOrderForm";
 import LimitOrderForm from "../components/LimitOrderForm";
