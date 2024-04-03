@@ -1,78 +1,123 @@
+import { useSelector } from "react-redux";
+import styled from "styled-components";
+import { RootState } from "../app/store";
 
-const data = [
-  {
-    id: 234234,
-    date: new Date().toLocaleString(),
-    type: "Sell",
-    price: 23,
-    quantity: 234,
-    total: 1244
-  },
-  {
-    id: 234298,
-    date: new Date().toLocaleString(),
-    type: "Buy",
-    price: 223,
-    quantity: 5234,
-    total: 12644
-  },
-  {
-    id: 234289,
-    date: new Date().toLocaleString(),
-    type: "Buy",
-    price: 423,
-    quantity: 2534,
-    total: 13444
-  },
-  {
-    id: 234245,
-    date: new Date().toLocaleString(),
-    type: "Sell",
-    price: 31,
-    quantity: 345,
-    total: 23449
-  },
-  {
-    id: 234256,
-    date: new Date().toLocaleString(),
-    type: "Sell",
-    price: 56,
-    quantity: 2640,
-    total: 5674
-  },
-];
+
+export const ArticleContainer = styled.article`
+  height: fit-content;
+  border: 1px solid #555;
+  border-radius: 0.3rem;
+  margin-bottom: 0.5rem;
+`;
+
+
+const HistoryContainer = styled(ArticleContainer)`
+  grid-area: hist;
+`;
+
+
+export const Caption = styled.caption`
+  color: #eee;
+  width: fit-content;
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.5rem;
+  margin: 0 auto;
+`;
+
+
+export const TableContainer = styled.article`
+  height: 15rem;
+  outline: none;
+  overflow-y: scroll;
+  &:focus {
+    border-color: #eee;
+  }
+`;
+
+
+export const Table = styled.table`
+  width: 100%;
+  border-collapse: collapse;
+`;
+
+
+export const TableHeader = styled.thead`
+  position: sticky;
+  top: 0;
+  font-weight: 300;
+`;
+
+
+export const Th = styled.th`
+  font-weight: 500;
+  background-color: #333;
+  padding: 0.5rem 0 0.5rem 0.5rem;
+  text-align: left;
+  margin: 0;
+  opacity: 90%;
+`;
+
+
+export const Td = styled.td<{type?: string}>`
+  padding: 0.2rem 0.5rem;
+  border: 2px solid #green;
+  &:nth-child(2) {
+    color: ${(props) => (props.type === "Buy" ? "#ccffd0" : "#ffdada")};
+  }
+`;
+
+
+  export const TableRow = styled.tr<{type?: string}>`
+  background-color: #3d3d3d;
+  
+  &:nth-child(even) {
+    background-color: #4d4d4d;
+  }
+  &:hover {
+    background-color: ${(props) => (props.type === "Buy" ? "#505f55" : "#5b4a4a")};
+    color: #fff;
+  }
+`;
 
 
 export default function History() {
+  const currencyBase = useSelector((state: RootState) => state.pairSelector.currencyBase);
+  const currencyQuote = useSelector((state: RootState) => state.pairSelector.currencyQuote);
+  // @ts-expect-error root state indexed
+  const history = useSelector((state: RootState) => state.history.orders[`${currencyBase}${currencyQuote}`].history.data).toReversed();
 
 
   return (
-    <>
-      <p>Trade History</p>
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Type</th>
-            <th>Price</th>
-            <th>RUB</th>
-            <th>USD</th>
-          </tr>
-        </thead>
-        <tbody>
-          {data.map((el) => {
-            return (
-              <tr key={el.id}>
-                <td>{el.date}</td>
-                <td>{el.type}</td>
-                <td>{el.price}</td>
-                <td>{el.quantity}</td>
-                <td>{el.total}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </>
+    <HistoryContainer>
+      <TableContainer>
+        <Table>
+          <Caption>Trade History</Caption>
+          <TableHeader>
+            <tr>
+              <Th>Date</Th>
+              <Th>Type</Th>
+              <Th>Price {currencyBase}</Th>
+              <Th>Quantity {currencyQuote}</Th>
+              <Th>Total {currencyBase}</Th>
+            </tr>
+          </TableHeader>
+          <tbody>
+            {history.map((el: {id: string, date: Date, price: number, quantity: number, total: number, type: string}) => {
+              const date = new Date(el.date).toLocaleString();
+              return (
+                <TableRow key={el.id} type={el.type}>
+                  <Td>{date}</Td>
+                  <Td type={el.type}>{el.type}</Td>
+                  <Td>{el.price}</Td>
+                  <Td>{el.quantity}</Td>
+                  <Td>{el.total}</Td>
+                </TableRow>
+              );
+            })}
+          </tbody>
+        </Table>
+      </TableContainer>
+    </HistoryContainer>
   );
 }

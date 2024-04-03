@@ -1,29 +1,32 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { data } from "../../app/tempDB";
+import { codes } from "../../app/tempDB";
+
 
 const initialState = {
-  currencyFrom: data[0],
-  currencyTo: data[1]
+  currencyBase: codes[0],
+  currencyQuote: codes[1],
 };
+
 
 export const pairSelectorSlice = createSlice({
   name: "pairSelector",
   initialState,
   reducers: {
-    setCurrencyFrom: (state, action) => {
-      state.currencyFrom = action.payload;
+    setCurrencyBase: (state, action) => {
+      state.currencyBase = action.payload;
     },
-    setCurrencyTo: (state, action) => {
-      state.currencyTo = action.payload;
+    setCurrencyQuote: (state, action) => {
+      state.currencyQuote = action.payload;
     },
     swap: (state) => {
-      const temp = state.currencyFrom;
-      state.currencyFrom = state.currencyTo;
-      state.currencyTo = temp;
+      const temp = state.currencyBase;
+      state.currencyBase = state.currencyQuote;
+      state.currencyQuote = temp;
     }
   }
 });
 
-export const { setCurrencyFrom, setCurrencyTo, swap } = pairSelectorSlice.actions;
+
+export const { setCurrencyBase, setCurrencyQuote, swap } = pairSelectorSlice.actions;
 
 export default pairSelectorSlice.reducer;

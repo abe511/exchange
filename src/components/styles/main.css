@@ -1,0 +1,28 @@
+
+@font-face {
+  font-family: "Roboto Condensed";
+  font-weight: 200 800;
+  src:
+  url("../../assets/fonts/RobotoCondensed-VariableFont_wght.ttf"),
+  /* url("../../assets/fonts/RobotoCondensed-Italic-VariableFont_wght.ttf"), */
+  ;
+}
+
+:root {
+  color-scheme: light dark;  
+  color: #eee;
+  background-color: #2a2a2a;
+  font-family: "Roboto Condensed";
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  display: block;
+  width: 100vw;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
