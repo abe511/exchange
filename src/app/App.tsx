@@ -1,4 +1,4 @@
-// import RateChart from "../components/RateChart";
+import RateChart from "../components/RateChart";
 import Selector from "../components/Selector";
 import BuyOrderForm from "../components/BuyOrderForm";
 import LimitOrderForm from "../components/LimitOrderForm";
@@ -12,18 +12,14 @@ import styled from "styled-components";
 import { mediaQueries } from "../components/styles/mediaQueries";
 
 
-// import "../styles/App.css";
-
 const Main = styled.main`
-  width: auto;
-  // max-width: 70%;
-  height: 100%;
-  // border: 3px solid green;
+  // width: auto;
+  // height: 100%;
   padding: 1rem 5%;
   margin: 0 auto;
   ${mediaQueries("md")`
-  padding: 2rem 10%;
-`};
+    padding: 2rem 10%;
+  `};
   ${mediaQueries("lg")`
     padding: 3rem 15%;
   `};
@@ -40,13 +36,12 @@ const FormContainer = styled.section`
   ;
   column-gap: 0.5rem;
   font-weight: 500;
-  // border: 2px solid lime;
   ${mediaQueries("sm")`
     grid-template-rows: 1fr 1fr;
     grid-template-areas:
       "limitForm limitForm"
       "buyForm sellForm"
-  ;
+    ;
   `};
   ${mediaQueries("lg")`
     grid-template-columns: 1fr 1fr 1fr;
@@ -70,26 +65,25 @@ const ListContainer = styled.section`
   column-gap: 0.5rem;
   
   ${mediaQueries("sm")`
-  grid-template-rows: 1fr 1fr;
-  grid-template-columns: 1fr 1fr;
-  grid-template-areas:
-  "sellList buyList"
-  "hist hist"
-  ;
-  
+    grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "sellList buyList"
+      "hist hist"
+    ;
   `};
   ${mediaQueries("xxl")`
     grid-template-columns: 1fr 2fr 1fr;
     grid-template-areas:
       "sellList hist buyList"
-      ;
+    ;
   `};
 `;
 
 export default function App() {
   return (
       <Main>
-        {/* <RateChart /> */}
+        <RateChart />
         <Selector />
         <FormContainer>
           <BuyOrderForm />
