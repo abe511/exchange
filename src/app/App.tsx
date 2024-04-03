@@ -89,7 +89,7 @@ const ListContainer = styled.section`
 export default function App() {
   return (
       <Main>
-        <RateChart />
+        {/* <RateChart /> */}
         <Selector />
         <FormContainer>
           <BuyOrderForm />
