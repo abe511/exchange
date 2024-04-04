@@ -1,15 +1,15 @@
-import RateChart from "../components/RateChart";
-import Selector from "../components/Selector";
-import BuyOrderForm from "../components/BuyOrderForm";
-import LimitOrderForm from "../components/LimitOrderForm";
-import SellOrderForm from "../components/SellOrderForm";
-import BuyOrderList from "../components/BuyOrderList";
-import SellOrderList from "../components/SellOrderList";
-import History from "../components/History";
+import RateChart from "./components/RateChart";
+import Selector from "./components/Selector";
+import BuyOrderForm from "./components/BuyOrderForm";
+import LimitOrderForm from "./components/LimitOrderForm";
+import SellOrderForm from "./components/SellOrderForm";
+import BuyOrderList from "./components/BuyOrderList";
+import SellOrderList from "./components/SellOrderList";
+import History from "./components/History";
 
 import styled from "styled-components";
 
-import { mediaQueries } from "../components/styles/mediaQueries";
+import { mediaQueries } from "./components/styles/mediaQueries";
 
 
 const Main = styled.main`
