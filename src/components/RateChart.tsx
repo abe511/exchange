@@ -52,7 +52,6 @@ const ChartWrapper = styled.section`
 `;
 
 const ChartContainer = styled.article`
-  height: 50%;
   height: 15rem;
   ${mediaQueries("sm")`
     height: 17rem;

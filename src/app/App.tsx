@@ -1,20 +1,18 @@
-import RateChart from "./components/RateChart";
-import Selector from "./components/Selector";
-import BuyOrderForm from "./components/BuyOrderForm";
-import LimitOrderForm from "./components/LimitOrderForm";
-import SellOrderForm from "./components/SellOrderForm";
-import BuyOrderList from "./components/BuyOrderList";
-import SellOrderList from "./components/SellOrderList";
-import History from "./components/History";
+import RateChart from "../components/RateChart";
+import Selector from "../components/Selector";
+import BuyOrderForm from "../components/BuyOrderForm";
+import LimitOrderForm from "../components/LimitOrderForm";
+import SellOrderForm from "../components/SellOrderForm";
+import BuyOrderList from "../components/BuyOrderList";
+import SellOrderList from "../components/SellOrderList";
+import History from "../components/History";
 
 import styled from "styled-components";
 
-import { mediaQueries } from "./components/styles/mediaQueries";
+import { mediaQueries } from "../components/styles/mediaQueries";
 
 
 const Main = styled.main`
-  // width: auto;
-  // height: 100%;
   padding: 1rem 5%;
   margin: 0 auto;
   ${mediaQueries("md")`
@@ -38,6 +36,7 @@ const FormContainer = styled.section`
   font-weight: 500;
   ${mediaQueries("sm")`
     grid-template-rows: 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
     grid-template-areas:
       "limitForm limitForm"
       "buyForm sellForm"
@@ -63,7 +62,6 @@ const ListContainer = styled.section`
     "hist"
   ;
   column-gap: 0.5rem;
-  
   ${mediaQueries("sm")`
     grid-template-rows: 1fr 1fr;
     grid-template-columns: 1fr 1fr;
@@ -82,19 +80,19 @@ const ListContainer = styled.section`
 
 export default function App() {
   return (
-      <Main>
-        <RateChart />
-        <Selector />
-        <FormContainer>
-          <BuyOrderForm />
-          <LimitOrderForm />
-          <SellOrderForm />
-        </FormContainer>
-        <ListContainer>
-          <SellOrderList />
-          <History />
-          <BuyOrderList />
-        </ListContainer>
-      </Main>
+    <Main>
+      <RateChart />
+      <Selector />
+      <FormContainer>
+        <BuyOrderForm />
+        <LimitOrderForm />
+        <SellOrderForm />
+      </FormContainer>
+      <ListContainer>
+        <SellOrderList />
+        <History />
+        <BuyOrderList />
+      </ListContainer>
+    </Main>
   );
 }
