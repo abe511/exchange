@@ -3,7 +3,7 @@
   font-family: "Roboto Condensed";
   font-weight: 200 800;
   src:
-  url("../../assets/fonts/RobotoCondensed-VariableFont_wght.ttf"),
+  url("../../assets/fonts/RobotoCondensed-VariableFont_wght.ttf") format("truetype"),
   /* url("../../assets/fonts/RobotoCondensed-Italic-VariableFont_wght.ttf"), */
   ;
 }
