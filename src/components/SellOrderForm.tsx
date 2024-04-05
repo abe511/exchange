@@ -43,7 +43,7 @@ export default function SellOrderForm() {
   const currencyQuote = useSelector((state: RootState) => state.pairSelector.currencyQuote);
   const pair = `${currencyBase}${currencyQuote}`;
   // @ts-expect-error root state indexed
-  const buyOrders = useSelector((state) => state.buyOrderList.orders[pair].buyOrders);
+  const buyOrders = useSelector((state) => state.buyOrderList.orders[pair as keyof typeof state.buyOrderList.orders].buyOrders);
 
   const dispatch = useDispatch();
 

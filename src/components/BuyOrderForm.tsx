@@ -73,8 +73,7 @@ const BuyOrderForm: React.FC = () => {
   const currencyBase = useSelector((state: RootState) => state.pairSelector.currencyBase);
   const currencyQuote = useSelector((state: RootState) => state.pairSelector.currencyQuote);
   const pair = `${currencyBase}${currencyQuote}`;
-  // @ts-expect-error root state indexed
-  const sellOrders = useSelector((state: RootState) => state.sellOrderList.orders[pair].sellOrders);
+  const sellOrders = useSelector((state: RootState) => state.sellOrderList.orders[pair as keyof typeof state.sellOrderList.orders].sellOrders);
   
   const dispatch = useDispatch();
 
@@ -174,6 +173,7 @@ const BuyOrderForm: React.FC = () => {
         <InputContainer>
         {/* @ts-expect-error styled component types */}
           <InputField type="buy-price" label="Price" inputValue={price} currency={currencyBase} setValue={setPrice} setError={setPriceError} error={priceError} />
+          {/* <InputField type="buy-price" label="Price" inputValue={price} currency={currencyBase} setValue={(price: string) => dispatch(setPrice(price))} setError={setPriceError} error={priceError} /> */}
         {/* @ts-expect-error styled component types */}
           <InputField type="buy-quantity" label="Quantity" inputValue={quantity} currency={currencyQuote} setValue={setQuantity} setError={setQuantityError} error={quantityError} />
           <TextField type="buy-total" label="Total" inputValue={total} currency={currencyBase} />

@@ -1,7 +1,13 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 
-const initialState = {
+type BuyOrderState = {
+  price: string,
+  quantity: string,
+  total: string,
+}
+
+const initialState: BuyOrderState = {
   price: "",
   quantity: "",
   total: "",
@@ -12,16 +18,16 @@ export const buyOrderSlice = createSlice({
   name: "buyOrder",
   initialState,
   reducers: {
-    setPrice: (state, action) => {
+    setPrice: (state, action: PayloadAction<string>) => {
       state.price = action.payload;
     },
-    setQuantity: (state, action) => {
+    setQuantity: (state, action: PayloadAction<string>) => {
       state.quantity = action.payload;
     },
-    setTotal: (state, action) => {
+    setTotal: (state, action: PayloadAction<string>) => {
       state.total = action.payload;
     },
-    setBuyOrder: (state, action) => {
+    setBuyOrder: (state, action: PayloadAction<BuyOrderState>) => {
       state.price = action.payload.price;
       state.quantity = action.payload.quantity;
       state.total = action.payload.total;

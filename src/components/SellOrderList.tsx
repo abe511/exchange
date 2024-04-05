@@ -33,13 +33,13 @@ const Cell = styled(Td)`
 export default function SellOrderList() {
   const currencyBase = useSelector((state: RootState) => state.pairSelector.currencyBase);
   const currencyQuote = useSelector((state: RootState) => state.pairSelector.currencyQuote);
-  // @ts-expect-error root state indexed
-  const sellOrders = useSelector((state) => state.sellOrderList.orders[`${currencyBase}${currencyQuote}`].sellOrders);
+  const pair = `${currencyBase}${currencyQuote}`;
+  const sellOrders = useSelector((state: RootState) => state.sellOrderList.orders[pair as keyof typeof state.sellOrderList.orders].sellOrders);
 
   const dispatch = useDispatch();
 
 
-  const handleClick = (price: number, quantity: number, total: number) => {
+  const handleClick = (price: string, quantity: string, total: string) => {
     dispatch(setBuyOrder({price, quantity, total}));
   }
 
@@ -59,7 +59,7 @@ export default function SellOrderList() {
           <tbody>
             {sellOrders.map((el: {id: string, price: number, quantity: number, total: number}) => {
               return (
-                <TableSellOrderRow key={el.id} onClick={() => {handleClick(el.price, el.quantity, el.total)}}>
+                <TableSellOrderRow key={el.id} onClick={() => {handleClick(el.price.toString(), el.quantity.toString(), el.total.toString())}}>
                   <Cell>{el.price}</Cell>
                   <Cell>{el.quantity}</Cell>
                   <Cell>{el.total}</Cell>

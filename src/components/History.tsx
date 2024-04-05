@@ -84,9 +84,9 @@ export const Td = styled.td<{type?: string}>`
 export default function History() {
   const currencyBase = useSelector((state: RootState) => state.pairSelector.currencyBase);
   const currencyQuote = useSelector((state: RootState) => state.pairSelector.currencyQuote);
-  // @ts-expect-error root state indexed
-  const history = useSelector((state: RootState) => state.history.orders[`${currencyBase}${currencyQuote}`].history.data).toReversed();
-
+  const pair = `${currencyBase}${currencyQuote}`;
+  const data = useSelector((state: RootState) => state.history.orders[pair as keyof typeof state.history.orders].history.data);
+  const history = [...data].reverse();
 
   return (
     <HistoryContainer>

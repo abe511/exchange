@@ -132,10 +132,8 @@ export default function RateChart() {
   const currencyBase = useSelector((state: RootState) => state.pairSelector.currencyBase);
   const currencyQuote = useSelector((state: RootState) => state.pairSelector.currencyQuote);
   const pair = `${currencyBase}${currencyQuote}`;
-  // @ts-expect-error root state indexed
-  const buyRates = useSelector((state: RootState) => state.history.orders[pair].history.timeseries.Buy);
-  // @ts-expect-error root state indexed
-  const sellRates = useSelector((state: RootState) => state.history.orders[pair].history.timeseries.Sell);
+  const buyRates = useSelector((state: RootState) => state.history.orders[pair as keyof typeof state.history.orders].history.timeseries.Buy);
+  const sellRates = useSelector((state: RootState) => state.history.orders[pair as keyof typeof state.history.orders].history.timeseries.Sell);
 
 
   // change chart title on currency change

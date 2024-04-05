@@ -58,10 +58,8 @@ export default function LimitOrderForm() {
   const currencyBase = useSelector((state: RootState) => state.pairSelector.currencyBase);
   const currencyQuote = useSelector((state: RootState) => state.pairSelector.currencyQuote);
   const pair = `${currencyBase}${currencyQuote}`;
-  // @ts-expect-error root state indexed  
-  const buyOrders = useSelector((state: RootState) => state.buyOrderList.orders[pair].buyOrders);
-  // @ts-expect-error root state indexed
-  const sellOrders = useSelector((state: RootState) => state.sellOrderList.orders[pair].sellOrders);
+  const buyOrders = useSelector((state: RootState) => state.buyOrderList.orders[pair as keyof typeof state.buyOrderList.orders].buyOrders);
+  const sellOrders = useSelector((state: RootState) => state.sellOrderList.orders[pair as keyof typeof state.sellOrderList.orders].sellOrders);
 
   const dispatch = useDispatch();
 
@@ -156,7 +154,7 @@ export default function LimitOrderForm() {
     let matchIndex = -1;
     let isPriceOrderExecutable = false;
     let qtyLeft = quantity;
-    const isPriceMatching = type === "Buy" ? ((a: number, b: number) => a >= b) : ((a: number, b: number) => a <= b);
+    const isPriceMatching = (type === "Buy") ? ((a: number, b: number) => a >= b) : ((a: number, b: number) => a <= b);
 
     while(qtyLeft >= 0 && orders[i]) {
         if(isPriceMatching(price, orders[i].price)) {
