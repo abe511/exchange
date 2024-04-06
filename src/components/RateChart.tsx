@@ -39,7 +39,7 @@ defaults.maintainAspectRatio = false;
 defaults.responsive = true;
 
 defaults.plugins.title.display = true;
-defaults.plugins.title.font = {weight: 600, size: 20, family: "system-ui"};
+defaults.plugins.title.font = {weight: 600, size: 20, family: "Roboto Condensed"};
 defaults.plugins.title.fullSize = true;
 defaults.plugins.title.align = "center";
 defaults.plugins.title.color = "#eee";
@@ -85,7 +85,13 @@ const Controls = styled.article`
 
 const options = {
   plugins: {
-    legend:true,
+    legend: {
+      labels: {
+        font: {
+          size: "16"
+        }
+      }
+    }
   },
   scales: {
     x: {
