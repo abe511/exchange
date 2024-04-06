@@ -88,8 +88,11 @@ const options = {
     legend: {
       labels: {
         font: {
-          size: "16"
-        }
+          size: "16",
+          family: "Roboto Condensed",
+          weight: "500",
+        },
+        color: "#aaa"
       }
     }
   },
