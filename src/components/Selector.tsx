@@ -58,7 +58,6 @@ const Switch = styled.div`
     border-color: #fff;
   }
   ${mediaQueries("sm")`
-    padding: 0 0.5rem;  
     border-right-width: 0;
     border-left-width: 0;
     border-radius: 0;
@@ -78,7 +77,6 @@ const Dropdown = styled.select<DropdownProps>`
   font-family: "Roboto Condensed", system-ui;
   font-weight: 500;
   font-size: 1.1rem;
-  padding: 0.5rem;
   border: 1px solid #aaa;
   border-radius: 0.3rem;
   cursor: pointer;
