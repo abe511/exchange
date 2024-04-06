@@ -27,6 +27,7 @@ export const LabelStyled = styled.label`
 
 export const InputStyled = styled.input`
   width: 100%;
+  height: 100%;
   background-color: #aaa;
   color: #222;
   font-size: 1.1rem;
