@@ -24,6 +24,7 @@ const SelectorContainer = styled.div`
   margin: 1rem auto;
   grid-template-columns: auto;
   grid-template-rows: auto auto auto;
+  grid-template-rows: 1fr 1fr 1fr;
   ${mediaQueries("sm")`
     grid-template-columns: 1fr auto 1fr;
     grid-template-rows: auto;
@@ -34,7 +35,7 @@ const SelectorContainer = styled.div`
 `;
 
 
-const Switch = styled.button`
+const Switch = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -73,6 +74,7 @@ type DropdownProps = {
 const Dropdown = styled.select<DropdownProps>`
   background-color: #777;
   color: #111;
+  height: 100%;
   font-family: "Roboto Condensed", system-ui;
   font-weight: 500;
   font-size: 1.1rem;
@@ -81,7 +83,6 @@ const Dropdown = styled.select<DropdownProps>`
   border-radius: 0.3rem;
   cursor: pointer;
   text-align: center;
-  height: max-content;
   &:hover {
     background-color: #aaa;
   }
@@ -95,6 +96,10 @@ const Dropdown = styled.select<DropdownProps>`
   outline: none;
 `;
 
+
+const Img = styled.img`
+  width: 1.5rem;
+`;
 
 export default function Selector() {
 
@@ -116,7 +121,7 @@ export default function Selector() {
             })}
           </Dropdown>
           <Switch onClick={() => dispatch(swap())}>
-            <img src={swapIcon} alt="swap currencies" className="btn icon" width={24}/>
+            <Img src={swapIcon} alt="swap currencies" className="btn icon"/>
           </Switch>
           <Dropdown name="quote" id="currency-quote" value={currencyQuote} onChange={(event) => dispatch(setCurrencyQuote(event.target.value))}>
             {codes.map((el) => {
