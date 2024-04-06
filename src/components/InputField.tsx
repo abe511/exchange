@@ -8,20 +8,21 @@ import { useAppDispatch } from "../app/store";
 
 export const FieldContainer = styled.div`
   display: grid;
-  grid-template-rows: auto auto 0.5rem;
+  grid-template-rows: auto auto auto;
   grid-template-columns: 70% 30%;
   grid-template-areas:
     "lbl lbl"
     "in txt"
     "msg msg"
-    ; 
+    ;
+  margin-bottom: 1rem;
 `;
 
 
 export const LabelStyled = styled.label`
   font-weight: 500;
   grid-area: lbl;
-  margin: 0.5rem 0.5rem;
+  margin: 0.3rem 0.5rem;
 `;
 
 

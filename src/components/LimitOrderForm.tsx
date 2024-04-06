@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
 
 import { ButtonBuy, ButtonSell } from "./styles/ButtonStyled";
-import { FieldSetStyled, LegendStyled, InputContainer, ButtonContainer } from "./BuyOrderForm";
+import { FormStyled, FieldSetStyled, LegendStyled, InputContainer, ButtonContainer } from "./BuyOrderForm";
 import InputField from "./InputField";
 import TextField from "./TextField";
 
@@ -15,7 +15,7 @@ import { addToHistory } from "../features/history/historySlice";
 import { RootState } from "../app/store";
 
 
-const LimitFormStyled = styled.form`
+const LimitFormStyled = styled(FormStyled)`
   grid-area: limitForm;
 `;
 

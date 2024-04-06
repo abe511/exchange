@@ -4,7 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
 
 import { ButtonSell } from "./styles/ButtonStyled";
-import { FieldSetStyled, LegendStyled, InputContainer, ButtonContainer } from "./BuyOrderForm";
+import { FormStyled, FieldSetStyled, LegendStyled, InputContainer, ButtonContainer } from "./BuyOrderForm";
 import InputField from "./InputField";
 import TextField from "./TextField";
 
@@ -14,7 +14,7 @@ import { addToHistory } from "../features/history/historySlice";
 import { RootState } from "../app/store";
 
 
-const SellFormStyled = styled.form`
+const SellFormStyled = styled(FormStyled)`
   grid-area: sellForm;
 `;
 

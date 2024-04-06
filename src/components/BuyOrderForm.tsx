@@ -11,9 +11,15 @@ import { ButtonBuy } from "./styles/ButtonStyled";
 import { setPrice, setQuantity, setTotal, setBuyOrder } from "../features/orders/buyOrderSlice";
 import { removeSellOrder, reduceSellQuantity } from "../features/orders/sellOrderListSlice";
 import { addToHistory } from "../features/history/historySlice";
+import { mediaQueries } from "./styles/mediaQueries";
 
 
-const BuyFormStyled = styled.form`
+export const FormStyled = styled.form`
+  margin-top: 1rem;
+`;
+
+
+const BuyFormStyled = styled(FormStyled)`
   grid-area: buyForm;
 `;
 
@@ -30,7 +36,7 @@ export const FieldSetStyled = styled.fieldset`
 
 export const LegendStyled = styled.legend`
   font-size: 1.1rem;
-  margin: 0.3rem auto;
+  margin: 0 auto;
   font-weight: 600;
   padding: 0 0.5rem;
 `;
@@ -47,7 +53,10 @@ export const InputContainer = styled.div`
 export const ButtonContainer = styled.div`
   display: flex;
   gap: 0.5rem;
-  margin-top: auto;
+  margin-top: 0;
+  ${mediaQueries("lg")`
+    margin-top: auto;
+  `};
 `;
 
 

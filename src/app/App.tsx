@@ -26,7 +26,7 @@ const Main = styled.main`
 const FormContainer = styled.section`
   display: grid;
   grid-template-columns: auto;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
   grid-template-areas:
     "limitForm"
     "buyForm"
@@ -35,7 +35,7 @@ const FormContainer = styled.section`
   column-gap: 0.5rem;
   font-weight: 500;
   ${mediaQueries("sm")`
-    grid-template-rows: 1fr 1fr;
+    grid-template-rows: auto auto;
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       "limitForm limitForm"

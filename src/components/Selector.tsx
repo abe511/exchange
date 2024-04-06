@@ -13,6 +13,7 @@ import { RootState } from "../app/store";
 const Title = styled.h1`
   display: block;
   color: #eee;
+  margin-top: 1rem;
   font-size: 1.2rem;
   text-align: center;
 `; 
