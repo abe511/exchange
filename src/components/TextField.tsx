@@ -12,7 +12,7 @@ const TextField:React.FC<Props> = ({ type, label, inputValue, currency }) => {
   return (
     <FieldContainer>
       <LabelStyled htmlFor={type}>{label}</LabelStyled>
-      <InputStyled type="numeric" id={type} value={inputValue} disabled/>
+      <InputStyled type="numeric" id={type} value={inputValue} readOnly/>
       <TextStyled>{currency}</TextStyled>
     </FieldContainer>
   );
