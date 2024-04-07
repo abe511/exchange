@@ -29,6 +29,11 @@ export const ButtonPrimary = styled(Button)`
     background-color: #777;
     border-color: #aaa;
   }
+  @media (hover: none), (hover: on-demand) {
+    &:hover {
+      background-color: none;
+      border-color: none;
+  }
   outline: none;
 `;
 
@@ -56,6 +61,13 @@ export const ButtonBuy = styled(ButtonPrimary)`
   &focus:not(:active) {
     background-color: #2b8f44;
     border-color: #51ff57;
+    color: #ccffd0;
+  }
+  @media (hover: none), (hover: on-demand) {
+    &:hover {
+      background-color: none;
+      border-color: none;
+      color: none;
   }
 `;
 
@@ -83,6 +95,12 @@ export const ButtonSell = styled(ButtonPrimary)`
   &focus:not(:active) {
     background-color: #c67878;
     border-color: #ff7575;
+  }
+  @media (hover: none), (hover: on-demand) {
+    &:hover {
+      background-color: none;
+      border-color: none;
+      color: none;
   }
 `;
 
