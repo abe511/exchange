@@ -25,6 +25,10 @@ export const ButtonPrimary = styled(Button)`
     background-color: #eee;
     border-color: #fff;
   }
+  &focus:not(:active) {
+    background-color: #777;
+    border-color: #aaa;
+  }
   outline: none;
 `;
 
@@ -49,6 +53,10 @@ export const ButtonBuy = styled(ButtonPrimary)`
     border-color: #cbffc1;
     color: #bdcab0;
   }
+  &focus:not(:active) {
+    background-color: #2b8f44;
+    border-color: #51ff57;
+  }
 `;
 
 export const ButtonSell = styled(ButtonPrimary)`
@@ -72,4 +80,9 @@ export const ButtonSell = styled(ButtonPrimary)`
     border-color: #ffc1c1;
     color: #a38282;
   }
+  &focus:not(:active) {
+    background-color: #c67878;
+    border-color: #ff7575;
+  }
 `;
+
