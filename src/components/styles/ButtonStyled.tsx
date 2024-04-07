@@ -13,9 +13,16 @@ export const ButtonPrimary = styled(Button)`
   border: 1px solid #aaa;
   border-radius: 0.3rem;
   cursor: pointer;
+  outline: none;
+
   &:hover {
     background-color: #aaa;
     border-color: #eee;
+  }
+  @media(hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: #aaa;
+      border-color: #eee;
   }
   &:focus-visible {
     background-color: #aaa;
@@ -25,16 +32,15 @@ export const ButtonPrimary = styled(Button)`
     background-color: #eee;
     border-color: #fff;
   }
-  &focus:not(:active) {
-    background-color: #777;
-    border-color: #aaa;
-  }
-  @media (hover: none), (hover: on-demand) {
-    &:hover {
-      background-color: none;
-      border-color: none;
-  }
-  outline: none;
+  // &focus-visible:not(:active) {
+  //   background-color: #777;
+  //   border-color: #aaa;
+  // }
+  // @media (hover: none), (hover: on-demand) {
+  //   &:hover {
+  //     background-color: none;
+  //     border-color: none;
+  // }
 `;
 
 export const ButtonBuy = styled(ButtonPrimary)`
@@ -43,10 +49,17 @@ export const ButtonBuy = styled(ButtonPrimary)`
   padding: 0.5rem;
   background-color: #2b8f44;
   border: 1px solid #51ff57;
+
   &:hover {
     background-color: #78c68b;
     border-color: #85ff75;
     color: #cdffc1;
+  }
+  @media(hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: #78c68b;
+      border-color: #85ff75;
+      color: #cdffc1;
   }
   &:focus-visible {
     background-color: #78c68b;
@@ -58,17 +71,17 @@ export const ButtonBuy = styled(ButtonPrimary)`
     border-color: #cbffc1;
     color: #bdcab0;
   }
-  &focus:not(:active) {
-    background-color: #2b8f44;
-    border-color: #51ff57;
-    color: #ccffd0;
-  }
-  @media (hover: none), (hover: on-demand) {
-    &:hover {
-      background-color: none;
-      border-color: none;
-      color: none;
-  }
+  // &focus-visible:not(:active) {
+  //   background-color: #2b8f44;
+  //   border-color: #51ff57;
+  //   color: #ccffd0;
+  // }
+  // @media (hover: none), (hover: on-demand) {
+  //   &:hover {
+  //     background-color: none;
+  //     border-color: none;
+  //     color: none;
+  // }
 `;
 
 export const ButtonSell = styled(ButtonPrimary)`
@@ -77,30 +90,43 @@ export const ButtonSell = styled(ButtonPrimary)`
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ff5151;
+
   &:hover {
-    color: #ffc1c1;
     background-color: #c67878;
     border-color: #ff7575;
+    color: #ffc1c1;
+  }
+  @media(hover: hover) and (pointer: fine) {
+    &:hover {
+      background-color: #c67878;
+      border-color: #ff7575;
+      color: #ffc1c1;
+    }
   }
   &:focus-visible {
-    color: #ffc1c1;
     background-color: #c67878;
     border-color: #ff7575;
+    color: #ffc1c1;
   }
   &:active {
     background-color: #fe8484;
     border-color: #ffc1c1;
     color: #a38282;
   }
-  &focus:not(:active) {
-    background-color: #c67878;
-    border-color: #ff7575;
-  }
-  @media (hover: none), (hover: on-demand) {
-    &:hover {
-      background-color: none;
-      border-color: none;
-      color: none;
-  }
+  // &focus-visible:not(:active) {
+  //   background-color: #c67878;
+  //   border-color: #ff7575;
+  //   color: #ffc1c1;
+  // }
+  // @media (hover: none), (hover: on-demand) {
+  //   &:hover {
+  //     background-color: none;
+  //     border-color: none;
+  //     color: none;
+  // }
+  // @media (hover: hover) {
+  //   &:hover:not(:active):not(:focus) {
+  //     background-color: #c67878;
+  // }
 `;
 
