@@ -3,14 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
 
+import InputField from "./InputField";
 import { ButtonBuy, ButtonSell } from "./styles/ButtonStyled";
 import { FormStyled, FieldSetStyled, LegendStyled, InputContainer, ButtonContainer } from "./BuyOrderForm";
-import InputField from "./InputField";
-import TextField from "./TextField";
+import inputAttrs from "../app/inputAttrs";
 
 import { addBuyOrder, reduceBuyOrder, filterBuyOrderList } from "../features/orders/buyOrderListSlice";
 import { addSellOrder, reduceSellOrder, filterSellOrderList } from "../features/orders/sellOrderListSlice";
-import { setPrice, setLimit, setQuantity, setTotal, resetLimitOrder } from "../features/orders/limitOrderSlice";
+import { setLimitOrder, resetLimitOrder } from "../features/orders/limitOrderSlice";
 import { addToHistory } from "../features/history/historySlice";
 import { RootState } from "../app/store";
 
@@ -20,40 +20,16 @@ const LimitFormStyled = styled(FormStyled)`
 `;
 
 
-type LimitBuy = {
-  id: string,
-  pair: string,
-  date: Date,
-  type: string,
-  price: number,
-  limit: number,
-  quantity: number,
-  total: number
-}
+const LimitOrderForm = () => {
+  
+  const values: LimitFormInput = useSelector((state: RootState) => state.limitOrder);
 
-
-type LimitSell = {
-  id: string,
-  pair: string,
-  date: Date,
-  type: string,
-  price: number,
-  limit: number,
-  quantity: number,
-  total: number
-}
-
-
-export default function LimitOrderForm() {
-
-  const price = useSelector((state: RootState) => state.limitOrder.price);
-  const limit = useSelector((state: RootState) => state.limitOrder.limit);
-  const quantity = useSelector((state: RootState) => state.limitOrder.quantity);
-  const total = useSelector((state: RootState) => state.limitOrder.total);
-
-  const [ priceError, setPriceError ] = useState("");
-  const [ quantityError, setQuantityError ] = useState("");
-  const [ limitError, setLimitError ] = useState("");
+  const [ errorMsgs, setErrorMsgs ] = useState({
+    priceError: "",
+    limitError: "",
+    quantityError: "",
+    totalError: "",
+  });
 
   const currencyBase = useSelector((state: RootState) => state.pairSelector.currencyBase);
   const currencyQuote = useSelector((state: RootState) => state.pairSelector.currencyQuote);
@@ -64,57 +40,68 @@ export default function LimitOrderForm() {
   const dispatch = useDispatch();
 
 
-  // calculate total. check for valid division
+  // calculate and set total
   useEffect(() => {
-    const limitValue = parseFloat(limit) || 0;
-    const priceValue = limitValue || parseFloat(price);
-    const res = parseFloat(quantity) / priceValue;
-
-    if(!isNaN(res) && priceValue !== 0 ) {
-      dispatch(setTotal(res.toFixed(2)));
-    } else {
-      dispatch(setTotal(""));
+    const priceValue = parseFloat(values.limit) || parseFloat(values.price) || 0;
+    const quantityValue =  parseFloat(values.quantity) || 0;
+    let newTotal = "";
+    if(priceValue > 0 && quantityValue > 0) {
+      newTotal = (quantityValue / priceValue).toFixed(2);
     }
-  }, [price, limit, quantity, dispatch]);
+    dispatch(setLimitOrder({...values, total: newTotal}));
+  }, [values, dispatch]);
 
-  // reset price or limit error on valid price or limit input
-  useEffect(() => {
-    const noEmptyStrings = price !== "" || limit !== "";
-    const noErrors = priceError !== "" || limitError !== "";
 
-    const priceValue = parseFloat(price);
-    const limitValue = parseFloat(limit);
-    const validNumbers = (!isNaN(priceValue) && priceValue !== 0) || (!isNaN(limitValue) && limitValue !== 0);
-    if(noEmptyStrings && noErrors && validNumbers) {
-      setPriceError("");
-      setLimitError("");
+  const resetErrors = () => {
+    setErrorMsgs({priceError: "", limitError: "", quantityError: "", totalError: ""});
+  };
+
+
+  const handleFormBlur = () => {
+    resetErrors();
+  };
+
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const field = e.target.name;
+    const userInput = e.target.value;
+    const decimals = /^\d*\.?\d{0,2}$/;
+    const number = /^[0-9]*$/;
+    const errorKey = `${field}Error`;
+
+    // value is 0 and first char is a number - replace with a new number
+    if(values[field as keyof typeof values] === "0" && number.test(userInput[userInput.length - 1])) {
+      dispatch(setLimitOrder({...values, [field]: userInput[userInput.length - 1]}));
     }
-  }, [price, limit, priceError, limitError]);
+    // value is empty and first char is not a number
+    else if(values[field as keyof typeof values] === "" && !number.test(userInput[userInput.length - 1])) {
+      setErrorMsgs({...errorMsgs, [errorKey]: "Enter a number with up to two decimal places"});
+    }
+    // value is valid
+    else if(decimals.test(userInput)) {
+      setErrorMsgs({...errorMsgs, [errorKey]: ""});
+      dispatch(setLimitOrder({...values, [field]: userInput}));
+    }
+  };
 
 
-  const checkInput = (quantity: number, price: number, limit: number) => {
-    // check quantity input
-    if(!quantity) {
-      setQuantityError("Enter quantity");
-      dispatch(setTotal(""));
+  const checkInput = (price: number, limit: number, quantity: number) => {
+    // check price and limit input
+    if(price <= 0 && limit <= 0) {
+      setErrorMsgs({...errorMsgs, priceError: "Enter price or limit", limitError: "Enter price or limit"});
       return false;
     }
-
-    // check price and limit input
-    if(!price && !limit) {
-      setPriceError("Enter price or limit");
-      setLimitError("Enter price or limit");
-      dispatch(setTotal(""));
+    // check quantity input
+    if(quantity <= 0) {
+      setErrorMsgs({...errorMsgs, quantityError: "Enter quantity"});
       return false;
     }
 
     return true;
-  }    
+  };
 
 
-  type Order = {id: string, pair: string, price: number, limit: number, quantity: number, total: number};
-
-  const addOrder = (order: Order, type: string) => {
+  const addOrder = (order: LimitOrder, type: string) => {
     if(type === "Buy") {
       dispatch(addBuyOrder(order));
     } else {
@@ -125,16 +112,14 @@ export default function LimitOrderForm() {
   };
 
 
-  type Record = {id: string, pair: string, date: number, type: string, price: number, quantity: number, total: number};
-  
-  const addHistoryRecord = (record: Record) => {
+  const addHistoryRecord = (record: HistoryRecord) => {
     dispatch(addToHistory(record));
     dispatch(resetLimitOrder());
     return;
   };
 
 
-  const executeOrder = (idx: number, record: Record) => {
+  const executeOrder = (idx: number, record: HistoryRecord) => {
     if(record.type === "Buy") {
       dispatch(reduceSellOrder({idx, pair, buyQuantity: record.quantity, buyTotal: record.total}));
     } else {
@@ -182,12 +167,12 @@ export default function LimitOrderForm() {
 
 
   const limitBuy = () => {
-    const buyLimit = parseFloat(limit) || 0;
-    const buyPrice = buyLimit ? buyLimit : parseFloat(price);
-    let buyQuantity = parseFloat(quantity) || 0;
-    let buyTotal = parseFloat(total) || 0;
+    const buyLimit = parseFloat(values.limit) || 0;
+    const buyPrice = buyLimit ? buyLimit : parseFloat(values.price) || 0;
+    let buyQuantity = parseFloat(values.quantity) || 0;
+    let buyTotal = parseFloat(values.total) || 0;
 
-    if(!checkInput(buyQuantity, buyPrice, buyLimit)) {
+    if(!checkInput(buyPrice, buyLimit, buyQuantity)) {
       return;
     }
 
@@ -208,7 +193,6 @@ export default function LimitOrderForm() {
       return;
     }
 
-
     // for all limit orders or 'executable price orders', where prices match
     const hasQuantityRemaining = sellOrders.every((sell: LimitSell, idx: number) => {
 
@@ -227,7 +211,6 @@ export default function LimitOrderForm() {
       return true;
     });
 
-
     dispatch(filterSellOrderList({pair}));
 
     if (hasQuantityRemaining) {
@@ -240,12 +223,12 @@ export default function LimitOrderForm() {
 
 
   const limitSell = () => {
-    const sellLimit = parseFloat(limit) || 0;
-    const sellPrice = sellLimit ? sellLimit : parseFloat(price);
-    let sellQuantity = parseFloat(quantity) || 0;
-    let sellTotal = parseFloat(total) || 0;
+    const sellLimit = parseFloat(values.limit) || 0;
+    const sellPrice = sellLimit ? sellLimit : parseFloat(values.price) || 0;
+    let sellQuantity = parseFloat(values.quantity) || 0;
+    let sellTotal = parseFloat(values.total) || 0;
 
-    if(!checkInput(sellQuantity, sellPrice, sellLimit)) {
+    if(!checkInput(sellPrice, sellLimit, sellQuantity)) {
       return;
     }
 
@@ -266,7 +249,6 @@ export default function LimitOrderForm() {
       return;
     }
 
-
     // for all limit orders or 'executable price orders', where prices match
     const hasQuantityRemaining = buyOrders.every((buy: LimitBuy, idx: number) => {
 
@@ -285,7 +267,6 @@ export default function LimitOrderForm() {
       return true;
     });
 
-
     dispatch(filterBuyOrderList({pair}));
 
     if (hasQuantityRemaining) {
@@ -298,25 +279,35 @@ export default function LimitOrderForm() {
 
 
   return (
-      <LimitFormStyled>
-        <FieldSetStyled>
-          <LegendStyled>Limit Order</LegendStyled>
-          <InputContainer>
-        {/* @ts-expect-error styled component types */}
-            <InputField type="limit-price" label="Price" inputValue={price} currency={currencyBase} setValue={setPrice} setError={setPriceError} error={priceError} />
-        {/* @ts-expect-error styled component types */}
-            <InputField type="limit-limit" label="Limit" inputValue={limit} currency={currencyBase} setValue={setLimit} setError={setLimitError} error={limitError} />
-        {/* @ts-expect-error styled component types */}
-            <InputField type="limit-quantity" label="Quantity" inputValue={quantity} currency={currencyQuote} setValue={setQuantity} setError={setQuantityError} error={quantityError} />
-            <TextField type="limit-total" label="Total" inputValue={total} currency={currencyBase} />
-            <ButtonContainer>
-        {/* @ts-expect-error styled component types */}
-              <ButtonBuy type="button" onClick={limitBuy}>BUY</ButtonBuy>
-        {/* @ts-expect-error styled component types */}
-              <ButtonSell type="button" onClick={limitSell}>SELL</ButtonSell>
-            </ButtonContainer>
-          </InputContainer>
-        </FieldSetStyled>
-      </LimitFormStyled>
+    <LimitFormStyled id="limit-form" onBlur={() => handleFormBlur()}>
+      <FieldSetStyled name="form-fieldset">
+        <LegendStyled>Limit Order</LegendStyled>
+        <InputContainer>
+          {
+            inputAttrs.map((input) => {
+              return <InputField
+                key={input.name}
+                id={`${input.form}-${input.name}`}
+                {...input}
+                value={values[input.name as keyof typeof values]}
+                currency={input.name === "quantity" ? currencyQuote : currencyBase}
+                errorMsg={errorMsgs[input.errorMsg as keyof typeof errorMsgs]}
+                onChange={handleChange}
+                autoComplete="off"
+                />;          
+            })
+          }
+          <ButtonContainer>
+            {/* @ts-expect-error styled component types */}
+            <ButtonBuy id="limit-form-buy-button" type="button" name="buy-button" onClick={limitBuy}>BUY</ButtonBuy>
+            {/* @ts-expect-error styled component types */}
+            <ButtonSell id="limit-form-sell-button" type="button" name="sell-button" onClick={limitSell}>SELL</ButtonSell>
+          </ButtonContainer>
+        </InputContainer>
+      </FieldSetStyled>
+    </LimitFormStyled>
   );
-}
+};
+
+
+export default LimitOrderForm;
