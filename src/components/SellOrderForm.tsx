@@ -3,15 +3,16 @@ import { useSelector, useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import styled from "styled-components";
 
-import { ButtonSell } from "./styles/ButtonStyled";
-import { FormStyled, FieldSetStyled, LegendStyled, InputContainer, ButtonContainer } from "./BuyOrderForm";
 import InputField from "./InputField";
-import TextField from "./TextField";
+import { ButtonSell } from "./styles/ButtonStyled";
+import inputAttrs from "../app/inputAttrs";
 
-import { setPrice, setQuantity, setTotal, setSellOrder } from "../features/orders/sellOrderSlice";
+import { setSellOrder } from "../features/orders/sellOrderSlice";
 import { removeBuyOrder, reduceBuyQuantity } from "../features/orders/buyOrderListSlice";
 import { addToHistory } from "../features/history/historySlice";
 import { RootState } from "../app/store";
+
+import { FormStyled, FieldSetStyled, LegendStyled, InputContainer, ButtonContainer } from "./BuyOrderForm";
 
 
 const SellFormStyled = styled(FormStyled)`
@@ -19,25 +20,15 @@ const SellFormStyled = styled(FormStyled)`
 `;
 
 
-type Buy = {
-  id: string,
-  pair: string,
-  date: Date,
-  type: string,
-  price: number,
-  quantity: number,
-  total: number
-}
-
-
 export default function SellOrderForm() {
-  
-  const price = useSelector((state: RootState) => state.sellOrder.price);
-  const quantity = useSelector((state: RootState) => state.sellOrder.quantity);
-  const total = useSelector((state: RootState) => state.sellOrder.total);
 
-  const [priceError, setPriceError] = useState("");
-  const [quantityError, setQuantityError] = useState("");
+  const values: FormInput = useSelector((state: RootState) => state.sellOrder);
+
+  const [ errorMsgs, setErrorMsgs ] = useState({
+    priceError: "",
+    quantityError: "",
+    totalError: "",
+  });
 
   const currencyBase = useSelector((state: RootState) => state.pairSelector.currencyBase);
   const currencyQuote = useSelector((state: RootState) => state.pairSelector.currencyQuote);
@@ -46,71 +37,87 @@ export default function SellOrderForm() {
 
   const dispatch = useDispatch();
 
-
-  // calculate total. check for valid division
+  // calculate and set total
   useEffect(() => {
-    const priceValue = parseFloat(price);
-    const res = parseFloat(quantity) / priceValue;
-    if(!isNaN(res) && priceValue !== 0 ) {
-      dispatch(setTotal(res.toFixed(2)));
-    } else {
-      dispatch(setTotal(""));
+    const priceValue = parseFloat(values.price) || 0;
+    const quantityValue =  parseFloat(values.quantity) || 0;
+    let newTotal = "";
+    if(priceValue > 0 && quantityValue > 0) {
+      newTotal = (quantityValue / priceValue).toFixed(2);
     }
-  }, [price, quantity, dispatch]);
+    dispatch(setSellOrder({...values, total: newTotal}));
+  }, [values, dispatch]);
 
 
-  useEffect(() => {
-    const regex = /^\d*\.?\d{0,2}$/;
+  const resetErrors = () => {
+    setErrorMsgs({priceError: "", quantityError: "", totalError: ""});
+  };
 
-    if(!regex.test(price)) {
-      setPriceError("Enter a number with up to two decimal places");
-    } else {
-      // setPriceError("");
+
+  const handleFormBlur = () => {
+    resetErrors();
+  };
+
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const field = e.target.name;
+    const userInput = e.target.value;
+    const decimals = /^\d*\.?\d{0,2}$/;
+    const number = /^[0-9]*$/;
+    const errorKey = `${field}Error`;
+
+    // value is 0 and first char is a number - replace with a new number
+    if(values[field as keyof typeof values] === "0" && number.test(userInput[userInput.length - 1])) {
+      dispatch(setSellOrder({...values, [field]: userInput[userInput.length - 1]}));
     }
-  }, [price, priceError]);
-
-
-  const checkInput = (sellQuantity: number, sellPrice: number) => {
-    // check quantity input
-    if(!sellQuantity) {
-      const errorQuantity = sellQuantity === 0 ? "Quantity must be a non-zero number" : "Enter quantity";
-      setQuantityError(errorQuantity);
-      dispatch(setTotal(""));
-      return false;
+    // value is empty and first char is not a number
+    else if(values[field as keyof typeof values] === "" && !number.test(userInput[userInput.length - 1])) {
+      setErrorMsgs({...errorMsgs, [errorKey]: "Enter a number with up to two decimal places"});
     }
-    
+    // value is valid
+    else if(decimals.test(userInput)) {
+      setErrorMsgs({...errorMsgs, [errorKey]: ""});
+      dispatch(setSellOrder({...values, [field]: userInput}));
+    }
+  };
+
+
+  const checkInput = (price: number, quantity: number) => {
     // check price input
-    if(!sellPrice) {
-      const errorPrice = sellPrice === 0 ? "Price must be a non-zero number" : "Enter price";
-      setPriceError(errorPrice);
-      dispatch(setTotal(""));
+    if(price <= 0) {
+      setErrorMsgs({...errorMsgs, priceError: "Enter price"});
       return false;
     }
-    
+    // check quantity input
+    if(quantity <= 0) {
+      setErrorMsgs({...errorMsgs, quantityError: "Enter quantity"});
+      return false;
+    }
+
     return true;
-  }   
+  };
 
 
   const marketSell = () => {
     const id = uuidv4();
-    const sellPrice = parseFloat(price);
-    const sellQuantity = parseFloat(quantity);
-    const sellTotal = parseFloat(total);
+    const sellPrice = parseFloat(values.price) || 0;
+    const sellQuantity = parseFloat(values.quantity) || 0;
+    const sellTotal = parseFloat(values.total) || 0;
 
-    if(!checkInput(sellQuantity, sellPrice)) {
+    if(!checkInput(sellPrice, sellQuantity)) {
       return;
     }
 
-    const match = buyOrders.some((buy: Buy, idx: number) => {
+    const match = buyOrders.some((buy: BuyOrder, idx: number) => {
       if(sellPrice !== buy.price) {
         return false;
       }
       if(sellQuantity > buy.quantity) {
-        setQuantityError("The requested quantity exceeds the available supply at this price");
+        setErrorMsgs({...errorMsgs, quantityError:"Requested quantity is not available at this price"});
       } else {
         if(sellQuantity < buy.quantity) {
-          // execute order for required quantity (send api request)
-          dispatch(reduceBuyQuantity({idx, sellQuantity, pair}));
+          // execute order with required quantity (send api request)
+          dispatch(reduceBuyQuantity({idx, pair, sellQuantity, sellTotal}));
         } else if (sellQuantity === buy.quantity){
           // execute immediately (send api request)
           dispatch(removeBuyOrder({idx, pair}));
@@ -131,28 +138,39 @@ export default function SellOrderForm() {
     });
 
     if(!match) {
-      setPriceError("No buy orders available at this price");
+      setErrorMsgs({...errorMsgs, priceError: "No buy orders available at this price"});
     }
 
   };
 
 
   return (
-    <SellFormStyled>
-      <FieldSetStyled>
-        <LegendStyled>Sell {currencyBase}</LegendStyled>
-        <InputContainer>
-        {/* @ts-expect-error styled component types */}
-          <InputField type="sell-price" label="Price" inputValue={price} currency={currencyBase} setValue={setPrice} setError={setPriceError} error={priceError} />
-        {/* @ts-expect-error styled component types */}
-          <InputField type="sell-quantity" label="Quantity" inputValue={quantity} currency={currencyQuote} setValue={setQuantity} setError={setQuantityError} error={quantityError} />
-          <TextField type="sell-total" label="Total" inputValue={total} currency={currencyBase} />
-          <ButtonContainer>
-        {/* @ts-expect-error styled component types */}
-            <ButtonSell type="button" onClick={marketSell}>SELL</ButtonSell>
-          </ButtonContainer>
-        </InputContainer>
-      </FieldSetStyled>
+    <SellFormStyled id="sell-form" onBlur={() => handleFormBlur()}>
+    <FieldSetStyled name="form-fieldset">
+      <LegendStyled>Sell {currencyBase}</LegendStyled>
+      <InputContainer>
+        {
+          inputAttrs.map((input) => {
+            if(input.name !== "limit") {
+              return <InputField
+                key={input.name}
+                id={`${input.form}-${input.name}`}
+                {...input}
+                value={values[input.name as keyof typeof values]}
+                currency={input.name === "quantity" ? currencyQuote : currencyBase}
+                errorMsg={errorMsgs[input.errorMsg as keyof typeof errorMsgs]}
+                onChange={handleChange}
+                autoComplete="off"
+              />;          
+            }
+          })
+        }
+        <ButtonContainer>
+          {/* @ts-expect-error styled component types */}
+          <ButtonSell id="sell-form-sell-button" type="button" name="sell-button" onClick={marketSell}>Sell</ButtonSell>
+        </ButtonContainer>
+      </InputContainer>
+    </FieldSetStyled>
     </SellFormStyled>
   );
 }

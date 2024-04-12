@@ -1,9 +1,5 @@
 import styled from "styled-components";
-import { StyleSheetManager } from "styled-components";
-import isValidProp from "@emotion/is-prop-valid";
 import React from "react";
-import { Dispatch } from "@reduxjs/toolkit";
-import { useAppDispatch } from "../app/store";
 
 
 export const FieldContainer = styled.div`
@@ -18,15 +14,14 @@ export const FieldContainer = styled.div`
   margin-bottom: 1rem;
 `;
 
-
 export const LabelStyled = styled.label`
   font-weight: 500;
   grid-area: lbl;
   margin: 0.3rem 0.5rem;
 `;
 
-
-export const InputStyled = styled.input`
+// export const InputStyled = styled.input<InputFieldProps>`
+export const InputStyled = styled.input<{name? : string}>`
   width: 100%;
   height: 100%;
   background-color: #aaa;
@@ -41,11 +36,11 @@ export const InputStyled = styled.input`
   border-right: 0;
   &:focus {
     background-color: #ddd;
-    border: 1px solid #fff;
+    background-color: ${(props) => props.name === "total" ? "#bbb": "#eee"};
+    border: 2px solid #fff;
     outline: none;
   }
   `;
-
 
   export const TextStyled = styled.div`
   border-radius: 0 0.3rem 0.3rem 0;
@@ -57,17 +52,14 @@ export const InputStyled = styled.input`
   text-align: center;
 `;
 
-
 export const MessageWrapper = styled.div`
   display: block;
   grid-area: msg;
 `;
 
-
 export const MessageContainer = styled.div`
   position: absolute;
   `;
-
 
 export const Message = styled.span`
   color: whitesmoke;
@@ -76,8 +68,8 @@ export const Message = styled.span`
   position: relative;
   top: 0.3rem;
   left: 1rem;
-  background-color: #222;
-  background-color: #000a;
+  // background-color: #000a;
+  background-color: #000;
   border: 1px solid #333;
   border-radius: 0.3rem;
   line-height: 1.5rem;
@@ -85,51 +77,25 @@ export const Message = styled.span`
   width: inherit;
   overflow: visible;
   z-index: 1000;
-  transition: opacity 100% 2ms;
+  opacity: 80%;
+  transition: opacity 80% 200ms;
 `;
 
 
-type Props = {
-  type: string,
-  label: string,
-  inputValue: string,
-  currency: string,
-  setValue: Dispatch,
-  setError: Dispatch,
-  error: string,
-}
-
-const InputField: React.FC<Props> = ({ type, label, inputValue, currency, setValue, setError, error }) => {
-
-  // const dispatch = useDispatch();
-  const dispatch = useAppDispatch();
-
-  // @ts-expect-error dispatch types
-  const inputHandler = (event: React.ChangeEvent<HTMLInputElement>, setValue, setError, dispatch) => {
-    if(/^\d*\.?\d{0,2}$/.test(event.target.value)) {
-      setError("");
-      dispatch(setValue(event.target.value));
-    } else {
-      setError("Enter a number with up to two decimal places");
-    }
-  };
-
-
+const InputField: React.FC<InputFieldProps> = ({ id, name, label, currency, errorMsg, onChange, ...otherProps }) => {
   return (
-    <FieldContainer>
-      <LabelStyled id={label} htmlFor={type}>{label}</LabelStyled>
-      <InputStyled type="text" id={type} name={type} value={inputValue} onChange={(event) => inputHandler(event, setValue, setError, dispatch)} />
+    <FieldContainer className="input-container">
+      <LabelStyled htmlFor={id}>{`${label} ${currency}`}</LabelStyled>
+      <InputStyled id={id} name={name} onChange={onChange} {...otherProps} />
       <TextStyled>{currency}</TextStyled>
       <MessageWrapper>
         <MessageContainer>
-          <StyleSheetManager shouldForwardProp={(error) => isValidProp(error)}>
-            {/* @ts-expect-error styled components types*/}
-            {error && <Message id="msg" error="true">{error}</Message>}
-          </StyleSheetManager>
+          {errorMsg && <Message>{errorMsg}</Message>}
         </MessageContainer>
       </MessageWrapper>
     </FieldContainer>
   );
 };
+
 
 export default InputField;

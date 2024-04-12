@@ -1,4 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+type Order = {
+  price: string,
+  limit: string,
+  quantity: string,
+  total: string
+};
 
 
 const initialState = {
@@ -25,9 +32,9 @@ export const limitOrderSlice = createSlice({
     setTotal: (state, action) => {
       state.total = action.payload;
     },
-    setLimitOrder: (state, action) => {
+    setLimitOrder: (state, action: PayloadAction<Order>) => {
       state.price = action.payload.price;
-      state.limit = action.payload.price;
+      state.limit = action.payload.limit;
       state.quantity = action.payload.quantity;
       state.total = action.payload.total;
     },

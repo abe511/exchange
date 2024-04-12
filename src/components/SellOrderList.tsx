@@ -10,7 +10,6 @@ const SellOrderContainer = styled(ArticleContainer)`
   grid-area: sellList;
 `;
 
-
 const TableSellOrderRow = styled(TableRow)`
   cursor: pointer;
   background-color: #5b4a4a;
@@ -21,7 +20,6 @@ const TableSellOrderRow = styled(TableRow)`
     background-color: #2b8f44;
   }
 `;
-
 
 const Cell = styled(Td)`
   &:nth-child(2) {

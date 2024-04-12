@@ -34,8 +34,14 @@ export const sellOrderListSlice = createSlice({
       state.orders[action.payload.pair].sellOrders.splice(action.payload.idx, 1);
     },
     reduceSellQuantity: (state, action) => {
+      // // @ts-expect-error slice type
+      // state.orders[action.payload.pair].sellOrders[action.payload.idx].quantity -= action.payload.buyQuantity;
       // @ts-expect-error slice type
       state.orders[action.payload.pair].sellOrders[action.payload.idx].quantity -= action.payload.buyQuantity;
+      // @ts-expect-error slice type
+      const newTotal = parseFloat((state.orders[action.payload.pair].sellOrders[action.payload.idx].total - action.payload.buyTotal).toFixed(2));
+      // @ts-expect-error slice type
+      state.orders[action.payload.pair].sellOrders[action.payload.idx].total = newTotal;
     },
     reduceSellOrder: (state, action) => {
       // @ts-expect-error slice type
