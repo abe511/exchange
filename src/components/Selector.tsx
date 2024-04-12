@@ -18,7 +18,6 @@ const Title = styled.h1`
   text-align: center;
 `; 
 
-
 const SelectorContainer = styled.div`
   display: grid;
   grid-gap: 1rem;
@@ -34,7 +33,6 @@ const SelectorContainer = styled.div`
     grid-gap: 0;
   `};
 `;
-
 
 const Switch = styled.div`
   display: flex;
@@ -66,11 +64,6 @@ const Switch = styled.div`
   outline: none;
 `;
 
-
-type DropdownProps = {
-  name: string;
-}
-
 const Dropdown = styled.select<DropdownProps>`
   background-color: #777;
   color: #111;
@@ -95,10 +88,10 @@ const Dropdown = styled.select<DropdownProps>`
   outline: none;
 `;
 
-
 const Img = styled.img`
   width: 1.5rem;
 `;
+
 
 export default function Selector() {
 
