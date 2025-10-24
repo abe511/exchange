@@ -4,7 +4,7 @@
 ---
 check out the demo:
 ### [**render**](https://exchange11.onrender.com/)
-### [**netlify**](https://https://metabolismus.netlify.app/)
+### [**netlify**](https://metabolismus.netlify.app/)
 ---
 The app allows users to:
 
